@@ -1,0 +1,8 @@
+Let's make our ports OKAY
+AuthServer -> https://localhost:5001
+
+Client1    -> https://localhost:5003
+Client2    -> https://localhost:5005
+
+Api1       -> https://localhost:5007
+Api1       -> https://localhost:5009
