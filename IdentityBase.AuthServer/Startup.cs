@@ -23,6 +23,16 @@ namespace IdentityBased.AuthServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddIdentityServer()
+                .AddInMemoryApiResources(Config.GetApiResources())
+                .AddInMemoryApiScopes(Config.GetApiScopes())
+                .AddInMemoryClients(Config.GetClients())
+            //IdentityServer needs an asymmetric key pair to sign and validate JWTs. Which means Private and Public Keys
+            //FOR DEVELOPMENT! WE CANNOT USE THIS IN/ON -:')- PRODUCTION!! 
+                .AddDeveloperSigningCredential(); 
+            
+
+
             services.AddControllersWithViews();
         }
 
@@ -43,7 +53,7 @@ namespace IdentityBased.AuthServer
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseIdentityServer();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
