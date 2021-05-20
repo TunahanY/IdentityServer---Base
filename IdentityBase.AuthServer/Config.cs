@@ -14,7 +14,7 @@ namespace IdentityBased.AuthServer
             return new List<ApiResource>()
             {
                 //IdentityServer will know which api has which authorization bcs of those guys.
-                new ApiResource("resource_api1"){Scopes={"api1.read","api1.write","api1.update" } },
+                new ApiResource("resource_api1"){Scopes={"api1.read","api1.write","api1.update" } }, //Used in API1 for JWT
                 new ApiResource("resource_api2"){Scopes={"api2.read","api2.write","api2.update" } }
             };
         }

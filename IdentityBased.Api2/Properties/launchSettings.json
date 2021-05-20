@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "IdentityBased.Api2": {
+    "IdentityBased.API2": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "weatherforecast",

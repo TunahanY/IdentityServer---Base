@@ -1,6 +1,6 @@
 using System;
 
-namespace IdentityBased.Api1
+namespace IdentityBased.API1
 {
     public class WeatherForecast
     {
