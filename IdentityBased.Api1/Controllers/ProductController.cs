@@ -14,7 +14,7 @@ namespace IdentityBased.API1.Controllers
     public class ProductsController : ControllerBase
     {
         // /api/products/GetProducts
-        [Authorize]
+        [Authorize(Policy = "ReadProduct")]
         [HttpGet]
         public IActionResult GetProducts()
         {
@@ -28,5 +28,21 @@ namespace IdentityBased.API1.Controllers
 
             return Ok(productList);
         }
+
+
+        [Authorize(Policy = "UpdateOrCreate")]
+        public IActionResult CreateProduct(int id)
+        {
+            return Ok($"ID:{id} updated.");
+        }
+
+        [Authorize(Policy = "UpdateOrCreate")]
+        public IActionResult UpdateProduct(Product product)
+        {
+            //return Ok($"ID:{product.Id} updated.");
+            return Ok(product);
+        }
+
+
     }
 }

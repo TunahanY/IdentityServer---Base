@@ -14,8 +14,14 @@ namespace IdentityBased.AuthServer
             return new List<ApiResource>()
             {
                 //IdentityServer will know which api has which authorization bcs of those guys.
-                new ApiResource("resource_api1"){Scopes={"api1.read","api1.write","api1.update" } }, //Used in API1 for JWT
-                new ApiResource("resource_api2"){Scopes={"api2.read","api2.write","api2.update" } }
+                new ApiResource("resource_api1"){
+                    Scopes={"api1.read","api1.write","api1.update" },
+                    ApiSecrets = new[]{new Secret("secretapi1".Sha256())} //Introspection Endpoint - WillDO! Move appsetting.json
+                }, //Used in API1 for JWT
+                new ApiResource("resource_api2"){
+                    Scopes={"api2.read","api2.write","api2.update" },
+                    ApiSecrets = new[]{new Secret("secretapi2".Sha256())} //Our password for Introspection Endpoint: To check is token valid for API || Token parsing
+                }
             };
         }
         //With which skills?
@@ -23,11 +29,11 @@ namespace IdentityBased.AuthServer
         {
             return new List<ApiScope>()
             {
-                //Api1
+                //API1
                 new ApiScope("api1.read","Read permission for API-1"),
                 new ApiScope("api1.write","Write permission for API-1"),
                 new ApiScope("api1.update","Update permission for API-1"),
-                //Api2
+                //API2
                 new ApiScope("api2.read","Read permission for API-2"),
                 new ApiScope("api2.write","Write permission for API-2"),
                 new ApiScope("api2.update","Update permission for API-2")
