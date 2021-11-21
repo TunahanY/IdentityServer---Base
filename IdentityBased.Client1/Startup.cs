@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,6 +23,24 @@ namespace IdentityBased.Client1
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(opts =>
+            {
+                opts.DefaultScheme = "Cookies"; //İK ve BT (bayi müşteri..) gibi 2 tane tanımlanabilir.
+                opts.DefaultChallengeScheme = "oidc";
+
+                //Client talking with AuthServer
+            }).AddCookie("Cookies").AddOpenIdConnect("oidc", opts =>
+            {
+                opts.SignInScheme = "Cookies";
+                opts.Authority = "https://localhost:5001"; //Who is in charge?
+                opts.ClientId = "Client1-Mvc";
+                opts.ClientSecret = "secret";   
+                opts.ResponseType = "code id_token";
+                opts.GetClaimsFromUserInfoEndpoint = true; //We can get users info via coookkkiiiee {given_name/last_name etc.}
+                opts.SaveTokens = true;
+                opts.Scope.Add("api1.read"); //our permissions
+                opts.Scope.Add("offline_access"); //RefreshToken
+            });
             services.AddControllersWithViews();
         }
 
@@ -43,7 +61,7 @@ namespace IdentityBased.Client1
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
