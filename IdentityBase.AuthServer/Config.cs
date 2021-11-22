@@ -105,14 +105,14 @@ namespace IdentityBased.AuthServer
                     ClientName= "Client1 MvcApp",
                     ClientSecrets =new[]{new Secret("secret".Sha256())},
                     AllowedGrantTypes= GrantTypes.Hybrid,
-                    RedirectUris = new List<string>{ "https://localhost:5003/signin-oidc" },
+                    RedirectUris = new List<string>{ "https://localhost:5003/signin-oidc" }, //Protocol
+                    PostLogoutRedirectUris = new List<string>{"https://localhost:5003/signout-callback-oidc"}, //Protocol - same in AuthServer
                     AllowedScopes = {IdentityServerConstants.StandardScopes.OpenId, IdentityServerConstants.StandardScopes.Profile,"api1.read",IdentityServerConstants.StandardScopes.OfflineAccess},
-                    AccessTokenLifetime = DateTime.Now.AddHours(2).Second,
+                    AccessTokenLifetime = 2*60*60,//DateTime.Now.AddHours(2).Second,
                     AllowOfflineAccess = true,//Refresh token
                     RefreshTokenUsage = TokenUsage.ReUse, //Could be one bcs we will get this everytime. OneTimeOnly
-                    AbsoluteRefreshTokenLifetime = DateTime.Now.AddDays(60).Second //SlidingRefreshTokenLifetime refresh -add time-
-                    
-
+                    RefreshTokenExpiration = TokenExpiration.Absolute,
+                    AbsoluteRefreshTokenLifetime = (int)(DateTime.Now.AddDays(60) - DateTime.Now).TotalSeconds//SlidingRefreshTokenLifetime refresh -add time-
                 }
             };
         }
