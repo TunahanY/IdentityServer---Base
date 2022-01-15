@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -40,6 +41,17 @@ namespace IdentityBased.Client1
                 opts.SaveTokens = true;
                 opts.Scope.Add("api1.read"); //our permissions
                 opts.Scope.Add("offline_access"); //RefreshToken
+                opts.Scope.Add("CountryAndCity");
+                opts.Scope.Add("Roles");
+                opts.ClaimActions.MapUniqueJsonKey("country", "country");//country in token - mapped
+                opts.ClaimActions.MapUniqueJsonKey("city", "city"); //city in token - mapped
+                opts.ClaimActions.MapUniqueJsonKey("role", "role");
+
+                opts.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    RoleClaimType = "role"
+                };
+
             });
             services.AddControllersWithViews();
         }

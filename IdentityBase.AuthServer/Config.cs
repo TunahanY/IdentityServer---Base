@@ -48,7 +48,14 @@ namespace IdentityBased.AuthServer
             return new List<IdentityResource>()
             {
                 new IdentityResources.OpenId(), //UsersId -> HAVE TO BE IN TOKEN -SubId
-                new IdentityResources.Profile()
+                new IdentityResources.Profile(),
+                 // Custom identity.
+                new IdentityResource(){Name="CountryAndCity",DisplayName = "Country and city",Description = "Users country and city info", //We'll see the permission view
+                UserClaims = new []{"country","city"}},
+
+
+                //Role based Authentication
+                new IdentityResource(){Name="Roles",DisplayName="Roles",Description="User roles",UserClaims= new[] {"role"}}
             };
         }
 
@@ -58,12 +65,18 @@ namespace IdentityBased.AuthServer
             {
                 new TestUser{SubjectId = "1", Username="tyollar",Password="password",Claims= new List<Claim>(){
                     new Claim("given_name","Tonyhan"),
-                    new Claim("family_name","Yollar")
+                    new Claim("family_name","Yollar"),
+                    new Claim("country","Turkey"),
+                    new Claim("city","Istanbul"),
+                    new Claim("role","admin")
                 }},
                 new TestUser{SubjectId = "2", Username="tName",Password="tpass",Claims= new List<Claim>(){
                     new Claim("given_name","TestName"),
                     //new Claim("middle_name","middleName"),
-                    new Claim("family_name","TestLastName")
+                    new Claim("family_name","TestLastName"),
+                     new Claim("country","Turkey"),
+                    new Claim("city","Ankara"),
+                    new Claim("role","customer")
                 }},
                 new TestUser{SubjectId = "3", Username="newUser",Password="password",Claims= new List<Claim>(){
                     new Claim("given_name","Hello"),
@@ -107,12 +120,15 @@ namespace IdentityBased.AuthServer
                     AllowedGrantTypes= GrantTypes.Hybrid,
                     RedirectUris = new List<string>{ "https://localhost:5003/signin-oidc" }, //Protocol
                     PostLogoutRedirectUris = new List<string>{"https://localhost:5003/signout-callback-oidc"}, //Protocol - same in AuthServer
-                    AllowedScopes = {IdentityServerConstants.StandardScopes.OpenId, IdentityServerConstants.StandardScopes.Profile,"api1.read",IdentityServerConstants.StandardScopes.OfflineAccess},
+                    AllowedScopes = {IdentityServerConstants.StandardScopes.OpenId, IdentityServerConstants.StandardScopes.Profile,"api1.read",
+                        IdentityServerConstants.StandardScopes.OfflineAccess,"CountryAndCity","Roles" },
                     AccessTokenLifetime = 2*60*60,//DateTime.Now.AddHours(2).Second,
                     AllowOfflineAccess = true,//Refresh token
                     RefreshTokenUsage = TokenUsage.ReUse, //Could be one bcs we will get this everytime. OneTimeOnly
                     RefreshTokenExpiration = TokenExpiration.Absolute,
-                    AbsoluteRefreshTokenLifetime = (int)(DateTime.Now.AddDays(60) - DateTime.Now).TotalSeconds//SlidingRefreshTokenLifetime refresh -add time-
+                    AbsoluteRefreshTokenLifetime = (int)(DateTime.Now.AddDays(60) - DateTime.Now).TotalSeconds,//SlidingRefreshTokenLifetime refresh -add time-
+                    RequireConsent = true //Permissions view
+
                 }
             };
         }
