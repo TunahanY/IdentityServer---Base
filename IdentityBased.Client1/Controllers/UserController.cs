@@ -41,6 +41,9 @@ namespace IdentityBased.Client1.Controllers
 
         public async Task<IActionResult> GetRefreshToken()
          {
+            var userName = User.Claims.First(x => x.Type == "name").Value;
+            var userName2 = User.Identity.Name;//??reachable with claims..
+            var userName3 = HttpContext.User.Identity.Name; //Check
             HttpClientHandler clientHandler = new HttpClientHandler();
             clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
             HttpClient httpClient = new HttpClient(clientHandler);

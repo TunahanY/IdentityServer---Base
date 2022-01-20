@@ -47,6 +47,7 @@ namespace IdentityBased.AuthServer
         {
             return new List<IdentityResource>()
             {
+                new IdentityResources.Email(),
                 new IdentityResources.OpenId(), //UsersId -> HAVE TO BE IN TOKEN -SubId
                 new IdentityResources.Profile(),
                  // Custom identity.
@@ -120,15 +121,32 @@ namespace IdentityBased.AuthServer
                     AllowedGrantTypes= GrantTypes.Hybrid,
                     RedirectUris = new List<string>{ "https://localhost:5003/signin-oidc" }, //Protocol
                     PostLogoutRedirectUris = new List<string>{"https://localhost:5003/signout-callback-oidc"}, //Protocol - same in AuthServer
-                    AllowedScopes = {IdentityServerConstants.StandardScopes.OpenId, IdentityServerConstants.StandardScopes.Profile,"api1.read",
+                    AllowedScopes = {IdentityServerConstants.StandardScopes.Email, IdentityServerConstants.StandardScopes.OpenId, IdentityServerConstants.StandardScopes.Profile,"api1.read",
                         IdentityServerConstants.StandardScopes.OfflineAccess,"CountryAndCity","Roles" },
                     AccessTokenLifetime = 2*60*60,//DateTime.Now.AddHours(2).Second,
                     AllowOfflineAccess = true,//Refresh token
                     RefreshTokenUsage = TokenUsage.ReUse, //Could be one bcs we will get this everytime. OneTimeOnly
                     RefreshTokenExpiration = TokenExpiration.Absolute,
                     AbsoluteRefreshTokenLifetime = (int)(DateTime.Now.AddDays(60) - DateTime.Now).TotalSeconds,//SlidingRefreshTokenLifetime refresh -add time-
-                    RequireConsent = true //Permissions view
-
+                    RequireConsent = false //Permissions view
+                },
+                new Client()
+                {
+                    ClientId ="Client2-Mvc",
+                    RequirePkce=false,
+                    ClientName= "Client2  MvcApp",
+                    ClientSecrets =new[]{new Secret("secret".Sha256())},
+                    AllowedGrantTypes= GrantTypes.Hybrid,
+                    RedirectUris = new List<string>{ "https://localhost:5005/signin-oidc" }, //Protocol
+                    PostLogoutRedirectUris = new List<string>{"https://localhost:5005/signout-callback-oidc"}, //Protocol - same in AuthServer
+                    AllowedScopes = {IdentityServerConstants.StandardScopes.OpenId, IdentityServerConstants.StandardScopes.Profile,"api1.read","api2.read",
+                        IdentityServerConstants.StandardScopes.OfflineAccess,"CountryAndCity","Roles" },
+                    AccessTokenLifetime = 2*60*60,//DateTime.Now.AddHours(2).Second,
+                    AllowOfflineAccess = true,//Refresh token
+                    RefreshTokenUsage = TokenUsage.ReUse, //Could be one bcs we will get this everytime. OneTimeOnly
+                    RefreshTokenExpiration = TokenExpiration.Absolute,
+                    AbsoluteRefreshTokenLifetime = (int)(DateTime.Now.AddDays(60) - DateTime.Now).TotalSeconds,//SlidingRefreshTokenLifetime refresh -add time-
+                    RequireConsent = false //Permissions view
                 }
             };
         }
