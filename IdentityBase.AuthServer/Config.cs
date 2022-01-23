@@ -147,6 +147,19 @@ namespace IdentityBased.AuthServer
                     RefreshTokenExpiration = TokenExpiration.Absolute,
                     AbsoluteRefreshTokenLifetime = (int)(DateTime.Now.AddDays(60) - DateTime.Now).TotalSeconds,//SlidingRefreshTokenLifetime refresh -add time-
                     RequireConsent = false //Permissions view
+                },
+                new Client()
+                {
+                    ClientId ="js-client",
+                    RequireClientSecret = false, //bcs its js app
+                    AllowedGrantTypes = GrantTypes.Code,
+                    ClientName = "Angular Client",
+                    AllowedScopes = {IdentityServerConstants.StandardScopes.Email, IdentityServerConstants.StandardScopes.OpenId, IdentityServerConstants.StandardScopes.Profile,"api1.read",
+                        IdentityServerConstants.StandardScopes.OfflineAccess,"CountryAndCity","Roles" },
+                    RedirectUris={"http://localhost:4200/callback"},
+                    AllowedCorsOrigins={"http://localhost:4200"},
+                    PostLogoutRedirectUris={ "http://localhost:4200"}
+                    
                 }
             };
         }
