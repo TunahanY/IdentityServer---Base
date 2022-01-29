@@ -29,7 +29,7 @@ namespace IdentityBased.Client1.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var userName = User.Claims.First(x => x.Type == "name");
+            var userName = User.Claims.First(x => x.Type == "username");
             //*LAST STEP
             HttpClient client = await _apiHttpClient.GetHttpClient();
             List<Product> products = new List<Product>();

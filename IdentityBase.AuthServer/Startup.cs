@@ -40,9 +40,7 @@ namespace IdentityBased.AuthServer
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 //.AddTestUsers(Config.GetUsers().ToList())
                 .AddProfileService<CustomProfileService>()
-                .AddDeveloperSigningCredential()
-                .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>();
-
+                .AddDeveloperSigningCredential();
             //IdentityServer needs an asymmetric key pair to sign and validate JWTs. Which means Private and Public Keys
             //FOR DEVELOPMENT! WE CANNOT USE THIS IN/ON -:')- PRODUCTION!! 
 
