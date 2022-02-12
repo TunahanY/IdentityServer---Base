@@ -31,12 +31,13 @@ namespace IdentityBased.Client1.Controllers
         }
 
 
-
-        public async Task LogOut()
+        //Signed out
+        public async Task<IActionResult> LogOut()
         {
             await HttpContext.SignOutAsync("Cookies"); //Logout from client1
-            await HttpContext.SignOutAsync("oidc");  //Logout from IdentiyServer
+            //await HttpContext.SignOutAsync("oidc");  //Logout from IdentiyServer
             //return from IdentityServer
+            return RedirectToAction("Index", "Home");
         }
 
         public async Task<IActionResult> GetRefreshToken()

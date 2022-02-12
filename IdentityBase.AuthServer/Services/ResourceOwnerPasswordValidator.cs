@@ -23,7 +23,8 @@ namespace IdentityBased.AuthServer.Services
 
             if(isUser)
             {
-                var user = _customUserRepository.FindByEmail(context.UserName);
+                //Without 'await' causes insteresting problems, you can check it without it :'))
+                var user = await _customUserRepository.FindByEmail(context.UserName);
                 context.Result = new GrantValidationResult(user.Id.ToString(),OidcConstants.AuthenticationMethods.Password); 
             }
         }

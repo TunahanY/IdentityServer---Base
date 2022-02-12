@@ -23,6 +23,7 @@ namespace IdentityBased.AuthServer.Services
             var subId = context.Subject.GetSubjectId();
             var user = await _customRepository.FindById(int.Parse(subId));
             //Which claims do I need?
+            
             var claims = new List<Claim>()
             {
                 new Claim(JwtRegisteredClaimNames.Email, user.Email), // "email" we can reach user infos without creating transaction with CLAIMS.
@@ -54,5 +55,6 @@ namespace IdentityBased.AuthServer.Services
             var user = await _customRepository.FindById(int.Parse(userId));
             context.IsActive = user != null ? true : false;
         }
+
     }
 }
