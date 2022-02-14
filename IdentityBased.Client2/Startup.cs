@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -23,6 +24,37 @@ namespace IdentityBased.Client2
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(opts =>
+            {
+                opts.DefaultScheme = "Cookies"; //HR or BT could be more.
+                opts.DefaultChallengeScheme = "oidc";
+                //Client talking with AuthServer
+            }).AddCookie("Cookies", opts => {
+                opts.AccessDeniedPath = "/Home/AccessDenied";
+            }).AddOpenIdConnect("oidc", opts =>
+            {
+                opts.SignInScheme = "Cookies";
+                opts.Authority = "https://localhost:5001"; //Who is in charge?
+                opts.ClientId = "Client2-Mvc";
+                opts.ClientSecret = "secret";
+                opts.ResponseType = "code id_token";
+                opts.GetClaimsFromUserInfoEndpoint = true; //We can get users info via coookkkiiiee {given_name/last_name etc.}
+                opts.SaveTokens = true;
+                opts.Scope.Add("api1.read"); //our permissions
+                opts.Scope.Add("offline_access"); //RefreshToken
+                opts.Scope.Add("CountryAndCity");
+                opts.Scope.Add("Roles");
+                opts.ClaimActions.MapUniqueJsonKey("country", "country");//country in token - mapped
+                opts.ClaimActions.MapUniqueJsonKey("city", "city"); //city in token - mapped
+                opts.ClaimActions.MapUniqueJsonKey("role", "role");
+
+                opts.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    RoleClaimType = "role"
+                };
+
+            });
+            services.AddControllersWithViews();
             services.AddControllersWithViews();
         }
 
@@ -43,7 +75,7 @@ namespace IdentityBased.Client2
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

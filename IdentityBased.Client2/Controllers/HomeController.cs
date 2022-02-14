@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using IdentityBased.Client2.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace IdentityBased.Client2.Controllers
 {
@@ -24,6 +25,12 @@ namespace IdentityBased.Client2.Controllers
         }
 
         public IActionResult Privacy()
+        {
+            return View();
+        } 
+        
+        [Authorize]
+        public IActionResult User()
         {
             return View();
         }

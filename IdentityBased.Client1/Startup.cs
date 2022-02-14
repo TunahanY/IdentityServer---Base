@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IdentityBased.Client1.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,35 +25,45 @@ namespace IdentityBased.Client1
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //DI Container to reach on CTORs
+
+            services.AddHttpContextAccessor();
+            services.AddScoped<IApiHttpClient, ApiResourcesHttpClient>();
             services.AddAuthentication(opts =>
             {
-                opts.DefaultScheme = "Cookies"; //İK ve BT (bayi müşteri..) gibi 2 tane tanımlanabilir.
-                opts.DefaultChallengeScheme = "oidc";
-
+                opts.DefaultScheme = "Cookies"; //HR or BT could be more.
+                //opts.DefaultChallengeScheme = "oidc"; //Needn't anymore cause we'll use our custom login actions
                 //Client talking with AuthServer
-            }).AddCookie("Cookies").AddOpenIdConnect("oidc", opts =>
+            }).AddCookie("Cookies", opts =>
             {
-                opts.SignInScheme = "Cookies";
-                opts.Authority = "https://localhost:5001"; //Who is in charge?
-                opts.ClientId = "Client1-Mvc";
-                opts.ClientSecret = "secret";   
-                opts.ResponseType = "code id_token";
-                opts.GetClaimsFromUserInfoEndpoint = true; //We can get users info via coookkkiiiee {given_name/last_name etc.}
-                opts.SaveTokens = true;
-                opts.Scope.Add("api1.read"); //our permissions
-                opts.Scope.Add("offline_access"); //RefreshToken
-                opts.Scope.Add("CountryAndCity");
-                opts.Scope.Add("Roles");
-                opts.ClaimActions.MapUniqueJsonKey("country", "country");//country in token - mapped
-                opts.ClaimActions.MapUniqueJsonKey("city", "city"); //city in token - mapped
-                opts.ClaimActions.MapUniqueJsonKey("role", "role");
-
-                opts.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-                {
-                    RoleClaimType = "role"
-                };
-
+                opts.LoginPath = "/Login/Index";
+                opts.AccessDeniedPath = "/Home/AccessDenied";
             });
+            //.AddOpenIdConnect("oidc", opts =>
+            //{
+            //    opts.SignInScheme = "Cookies";
+            //    opts.Authority = "https://localhost:5001"; //Who is in charge?
+            //    opts.ClientId = "Client1-Mvc";
+            //    opts.ClientSecret = "secret";
+            //    opts.ResponseType = "code id_token";
+            //    opts.GetClaimsFromUserInfoEndpoint = true; //We can get users info via coookkkiiiee {given_name/last_name etc.}
+            //    opts.SaveTokens = true;
+            //    opts.Scope.Add("api1.read"); //our permissions
+            //    opts.Scope.Add("offline_access"); //RefreshToken
+            //    opts.Scope.Add("CountryAndCity");
+            //    opts.Scope.Add("Roles");
+            //    opts.Scope.Add("email");
+            //    opts.ClaimActions.MapUniqueJsonKey("country", "country");//country in token - mapped
+            //    opts.ClaimActions.MapUniqueJsonKey("city", "city"); //city in token - mapped
+            //    opts.ClaimActions.MapUniqueJsonKey("role", "role");
+
+            //    opts.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+            //    {
+            //        RoleClaimType = "role",
+            //        NameClaimType = "Name"
+            //    };
+
+            //});
             services.AddControllersWithViews();
         }
 

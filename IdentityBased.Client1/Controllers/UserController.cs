@@ -31,16 +31,20 @@ namespace IdentityBased.Client1.Controllers
         }
 
 
-
-        public async Task LogOut()
+        //Signed out
+        public async Task<IActionResult> LogOut()
         {
             await HttpContext.SignOutAsync("Cookies"); //Logout from client1
-            await HttpContext.SignOutAsync("oidc");  //Logout from IdentiyServer
+            //await HttpContext.SignOutAsync("oidc");  //Logout from IdentiyServer
             //return from IdentityServer
+            return RedirectToAction("Index", "Home");
         }
 
         public async Task<IActionResult> GetRefreshToken()
          {
+            var userName = User.Claims.First(x => x.Type == "name").Value;
+            var userName2 = User.Identity.Name;//??reachable with claims..
+            var userName3 = HttpContext.User.Identity.Name; //Check
             HttpClientHandler clientHandler = new HttpClientHandler();
             clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
             HttpClient httpClient = new HttpClient(clientHandler);
@@ -51,8 +55,8 @@ namespace IdentityBased.Client1.Controllers
             } 
             var refreshToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.RefreshToken);
             RefreshTokenRequest refreshTokenRequest = new RefreshTokenRequest();
-            refreshTokenRequest.ClientId = _configuration["ClientMVC:ClientId"];
-            refreshTokenRequest.ClientSecret = _configuration["ClientMVC:ClientSecret"];
+            refreshTokenRequest.ClientId = _configuration["ClilentResourceOwner:ClientId"];
+            refreshTokenRequest.ClientSecret = _configuration["ClilentResourceOwner:ClientSecret"];
             refreshTokenRequest.RefreshToken = refreshToken;//Gotta Check2
             refreshTokenRequest.Address = disco.TokenEndpoint;//We don't give it Username pw; bcs IdentityServer recognize user from coookkkiieee
             var token = await httpClient.RequestRefreshTokenAsync(refreshTokenRequest);//WTF Gotta Check1
