@@ -8,11 +8,11 @@ namespace IdentityBased.AuthServer.Models
 {
     public class CustomDbContext : DbContext
     {
-        public CustomDbContext(DbContextOptions opts) : base(opts)
+        //When you got more then one Context. <T>
+        public CustomDbContext(DbContextOptions<CustomDbContext> opts) : base(opts)
         {
 
         }
-
 
         public DbSet<CustomUser> customUsers { get; set; }
 

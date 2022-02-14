@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using IdentityBased.AuthServer.Models;
 using IdentityBased.AuthServer.Repository;
@@ -33,11 +34,23 @@ namespace IdentityBased.AuthServer
             {
                 option.UseSqlServer(Configuration.GetConnectionString("LocalDb"));
             });
+
+
+            var assemblyName = typeof(Startup).GetTypeInfo().GetTypeInfo().Assembly.GetName().Name;
+
             services.AddIdentityServer()
-                .AddInMemoryApiResources(Config.GetApiResources())
-                .AddInMemoryApiScopes(Config.GetApiScopes())
-                .AddInMemoryClients(Config.GetClients())
-                .AddInMemoryIdentityResources(Config.GetIdentityResources())
+                .AddConfigurationStore(opts =>
+                {
+                    opts.ConfigureDbContext = c => c.UseSqlServer(Configuration.GetConnectionString("LocalDb"), sqlOpts => sqlOpts.MigrationsAssembly(assemblyName));
+                }) //ConfigurationDbContext
+                .AddOperationalStore(opts =>
+                {
+                    opts.ConfigureDbContext = c => c.UseSqlServer(Configuration.GetConnectionString("LocalDb"), sqlOpts => sqlOpts.MigrationsAssembly(assemblyName));
+                }) //PersistedGrantDbContext
+                //.AddInMemoryApiResources(Config.GetApiResources())
+                //.AddInMemoryApiScopes(Config.GetApiScopes())
+                //.AddInMemoryClients(Config.GetClients())
+                //.AddInMemoryIdentityResources(Config.GetIdentityResources())
                 //.AddTestUsers(Config.GetUsers().ToList())
                 .AddProfileService<CustomProfileService>()
                 .AddDeveloperSigningCredential()

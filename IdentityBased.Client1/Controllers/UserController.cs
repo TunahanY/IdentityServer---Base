@@ -55,8 +55,8 @@ namespace IdentityBased.Client1.Controllers
             } 
             var refreshToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.RefreshToken);
             RefreshTokenRequest refreshTokenRequest = new RefreshTokenRequest();
-            refreshTokenRequest.ClientId = _configuration["ClientMVC:ClientId"];
-            refreshTokenRequest.ClientSecret = _configuration["ClientMVC:ClientSecret"];
+            refreshTokenRequest.ClientId = _configuration["ClilentResourceOwner:ClientId"];
+            refreshTokenRequest.ClientSecret = _configuration["ClilentResourceOwner:ClientSecret"];
             refreshTokenRequest.RefreshToken = refreshToken;//Gotta Check2
             refreshTokenRequest.Address = disco.TokenEndpoint;//We don't give it Username pw; bcs IdentityServer recognize user from coookkkiieee
             var token = await httpClient.RequestRefreshTokenAsync(refreshTokenRequest);//WTF Gotta Check1
