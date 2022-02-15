@@ -1,13 +1,13 @@
-﻿using IdentityServer4;
+﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+
+
+using IdentityServer4;
 using IdentityServer4.Models;
-using IdentityServer4.Test;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
-namespace IdentityBased.AuthServer
+namespace IdentityServer_IdentityAPI.AuthServer
 {
     public static class Config
     {
@@ -57,33 +57,6 @@ namespace IdentityBased.AuthServer
 
                 //Role based Authentication
                 new IdentityResource(){Name="Roles",DisplayName="Roles",Description="User roles",UserClaims= new[] {"role"}}
-            };
-        }
-
-        public static IEnumerable<TestUser> GetUsers()
-        {
-            return new List<TestUser>()
-            {
-                new TestUser{SubjectId = "1", Username="tyollar",Password="password",Claims= new List<Claim>(){
-                    new Claim("given_name","Tonyhan"),
-                    new Claim("family_name","Yollar"),
-                    new Claim("country","Turkey"),
-                    new Claim("city","Istanbul"),
-                    new Claim("role","admin")
-                }},
-                new TestUser{SubjectId = "2", Username="tName",Password="tpass",Claims= new List<Claim>(){
-                    new Claim("given_name","TestName"),
-                    //new Claim("middle_name","middleName"),
-                    new Claim("family_name","TestLastName"),
-                     new Claim("country","Turkey"),
-                    new Claim("city","Ankara"),
-                    new Claim("role","customer")
-                }},
-                new TestUser{SubjectId = "3", Username="newUser",Password="password",Claims= new List<Claim>(){
-                    new Claim("given_name","Hello"),
-                    new Claim("family_name","Again")
-                }
-                }
             };
         }
 
@@ -159,15 +132,15 @@ namespace IdentityBased.AuthServer
                     RedirectUris={"http://localhost:4200/callback"},
                     AllowedCorsOrigins={"http://localhost:4200"},
                     PostLogoutRedirectUris={ "http://localhost:4200"}
-                    
+
                 },
                 //DB
                 new Client()
                 {
-                    ClientId ="Client1-ResourceOwner-Mvc",                  
+                    ClientId ="Client1-ResourceOwner-Mvc",
                     ClientName = "Client1 App MvcApp",
                     ClientSecrets =new[]{new Secret("secret".Sha256())},
-                    AllowedGrantTypes= GrantTypes.ResourceOwnerPassword,      
+                    AllowedGrantTypes= GrantTypes.ResourceOwnerPassword,
                     AllowedScopes = {IdentityServerConstants.StandardScopes.Email, IdentityServerConstants.StandardScopes.OpenId, IdentityServerConstants.StandardScopes.Profile,"api1.read",
                         IdentityServerConstants.StandardScopes.OfflineAccess,"CountryAndCity","Roles" },
                     AccessTokenLifetime = 2*60*60,//DateTime.Now.AddHours(2).Second,
@@ -175,7 +148,6 @@ namespace IdentityBased.AuthServer
                     RefreshTokenUsage = TokenUsage.ReUse, //Could be one bcs we will get this everytime. OneTimeOnly
                     RefreshTokenExpiration = TokenExpiration.Absolute,
                     AbsoluteRefreshTokenLifetime = (int)(DateTime.Now.AddDays(60) - DateTime.Now).TotalSeconds//SlidingRefreshTokenLifetime refresh -add time-
-                    
                 },
             };
         }
