@@ -6,14 +6,14 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 using IdentityModel;
-using IdentityServer_IdentityAPI.AuthServer.Data;
-using IdentityServer_IdentityAPI.AuthServer.Models;
+using IdentityServerIdentityAPI.AuthServer.Data;
+using IdentityServerIdentityAPI.AuthServer.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
-namespace IdentityServer_IdentityAPI.AuthServer
+namespace IdentityServerIdentityAPI.AuthServer
 {
     public class SeedData
     {

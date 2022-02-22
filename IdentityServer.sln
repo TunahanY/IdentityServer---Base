@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Ports.txt = Ports.txt
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer-IdentityAPI.AuthServer", "IdentityServer-IdentityAPI.AuthServer\IdentityServer-IdentityAPI.AuthServer.csproj", "{9C8D5078-BEEC-4E79-B2E2-C4CFCE7F680D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServerIdentityAPI.AuthServer", "IdentityServer-IdentityAPI.AuthServer\IdentityServerIdentityAPI.AuthServer.csproj", "{9C8D5078-BEEC-4E79-B2E2-C4CFCE7F680D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

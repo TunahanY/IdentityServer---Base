@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using IdentityServer_IdentityAPI.AuthServer.Models;
+using IdentityServerIdentityAPI.AuthServer.Models;
 
-namespace IdentityServer_IdentityAPI.AuthServer.Data
+namespace IdentityServerIdentityAPI.AuthServer.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {

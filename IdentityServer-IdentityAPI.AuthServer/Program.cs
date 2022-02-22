@@ -12,7 +12,7 @@ using Serilog.Sinks.SystemConsole.Themes;
 using System;
 using System.Linq;
 
-namespace IdentityServer_IdentityAPI.AuthServer
+namespace IdentityServerIdentityAPI.AuthServer
 {
     public class Program
     {

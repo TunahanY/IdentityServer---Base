@@ -7,7 +7,7 @@ using IdentityServer4.Models;
 using System;
 using System.Collections.Generic;
 
-namespace IdentityServer_IdentityAPI.AuthServer
+namespace IdentityServerIdentityAPI.AuthServer
 {
     public static class Config
     {
@@ -24,7 +24,8 @@ namespace IdentityServer_IdentityAPI.AuthServer
                 new ApiResource("resource_api2"){
                     Scopes={"api2.read","api2.write","api2.update" },
                     ApiSecrets = new[]{new Secret("secretapi2".Sha256())} //Our password for Introspection Endpoint: To check is token valid for API || Token parsing
-                }
+                },
+                new ApiResource(IdentityServerConstants.LocalApi.ScopeName)
             };
         }
         //With which skills?
@@ -39,7 +40,9 @@ namespace IdentityServer_IdentityAPI.AuthServer
                 //API2
                 new ApiScope("api2.read","Read permission for API-2"),
                 new ApiScope("api2.write","Write permission for API-2"),
-                new ApiScope("api2.update","Update permission for API-2")
+                new ApiScope("api2.update","Update permission for API-2"),
+                //API3
+                new ApiScope(IdentityServerConstants.LocalApi.ScopeName)
             };
         }
 
@@ -140,9 +143,9 @@ namespace IdentityServer_IdentityAPI.AuthServer
                     ClientId ="Client1-ResourceOwner-Mvc",
                     ClientName = "Client1 App MvcApp",
                     ClientSecrets =new[]{new Secret("secret".Sha256())},
-                    AllowedGrantTypes= GrantTypes.ResourceOwnerPassword,
+                    AllowedGrantTypes= GrantTypes.ResourceOwnerPasswordAndClientCredentials,//Get token to signup method and Resource to other apis
                     AllowedScopes = {IdentityServerConstants.StandardScopes.Email, IdentityServerConstants.StandardScopes.OpenId, IdentityServerConstants.StandardScopes.Profile,"api1.read",
-                        IdentityServerConstants.StandardScopes.OfflineAccess,"CountryAndCity","Roles" },
+                        IdentityServerConstants.StandardScopes.OfflineAccess,"CountryAndCity","Roles",IdentityServerConstants.LocalApi.ScopeName },
                     AccessTokenLifetime = 2*60*60,//DateTime.Now.AddHours(2).Second,
                     AllowOfflineAccess = true,//Refresh token
                     RefreshTokenUsage = TokenUsage.ReUse, //Could be one bcs we will get this everytime. OneTimeOnly

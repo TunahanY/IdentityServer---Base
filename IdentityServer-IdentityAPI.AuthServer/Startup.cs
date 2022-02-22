@@ -2,9 +2,9 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using IdentityServerIdentityAPI.AuthServer.Data;
 using IdentityServer4;
-using IdentityServer_IdentityAPI.AuthServer.Data;
-using IdentityServer_IdentityAPI.AuthServer.Models;
+using IdentityServerIdentityAPI.AuthServer.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -12,8 +12,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using IdentityServerIdentityAPI.AuthServer.Services;
 
-namespace IdentityServer_IdentityAPI.AuthServer
+namespace IdentityServerIdentityAPI.AuthServer
 {
     public class Startup
     {
@@ -28,6 +29,7 @@ namespace IdentityServer_IdentityAPI.AuthServer
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddLocalApiAuthentication();
             services.AddControllersWithViews();
 
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -51,7 +53,8 @@ namespace IdentityServer_IdentityAPI.AuthServer
                 .AddInMemoryApiScopes(Config.GetApiScopes())
                 .AddInMemoryClients(Config.GetClients())
                 .AddInMemoryApiResources(Config.GetApiResources())
-                .AddAspNetIdentity<ApplicationUser>();
+                .AddAspNetIdentity<ApplicationUser>()
+                .AddResourceOwnerValidator<IdentitResOwnerPwValidator>();
 
             // not recommended for production - you need to store your key material somewhere secure
             builder.AddDeveloperSigningCredential();
